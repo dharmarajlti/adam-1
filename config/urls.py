@@ -31,7 +31,6 @@ urlpatterns = [
     path('', include('django.contrib.auth.urls')),
     path('', views.index),
     path('accounts/', include('allauth.urls')),
-<<<<<<< HEAD
     path('calculator/',include("calc.urls")),
     path('analysis/',include("calc.urls")),
     url(r'^login/$', auth_views.LoginView.as_view(),name='login'),
@@ -42,8 +41,7 @@ urlpatterns = [
     path('api/', include("adam.urls"), name="address_api"),
     # path('create_address/', include("adam.urls"), name="create_address"),
     # path('view_address/', include("adam.urls"), name="view_address")
-    path('update_scenario_status/', include("calc.urls"), name='update_scenario_status')
-=======
+    path('update_scenario_status/', include("calc.urls"), name='update_scenario_status'),
     path('home/', views.page_index, name='home'),
     path('calculator/', views.calculator_view, name='calculator'),
     url(r'^login/$', auth_views.LoginView.as_view(), name='login'),
@@ -58,7 +56,6 @@ urlpatterns = [
     path('get_calculator_data/', views.get_calculator_data, name='get_calculator_data'),
     path('update_scenario_status/', views.update_scenario_status, name='update_scenario_status'),
     path('get_calculator_version/', views.get_calculator_version, name='get_calculator_version')
->>>>>>> f17198c0d91c07da7afb6aa39dd677288c3a10d0
 ]
 
 if settings.DEBUG:

@@ -16,10 +16,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/datetime/1.1.2/js/dataTables.dateTime.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
- <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/datetime/1.1.2/css/dataTables.dateTime.min.css" />
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 <link rel="stylesheet" href="{% static "base.css" %}">
@@ -90,7 +92,6 @@
           </div>
            {% show_calculator_tag user as calculator_option %}
           <div class="headerContainerRight">
-<<<<<<< HEAD
 <!--            <div class="dropdown d-md-flex d-none" id="calculator_version">-->
 <!--              <input type="text" readonly class="d-none" id="main_calculator_id" value="">-->
 <!--              <button class="btn dropdown-toggle text-white" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">-->
@@ -104,7 +105,6 @@
 <!--              {% endif %}-->
 <!--              </ul>-->
 <!--            </div>-->
-=======
             <div class="dropdown d-md-flex d-none" id="calculator_version">
               <input type="text" readonly class="d-none" id="main_calculator_id" value="">
               <button class="btn dropdown-toggle text-white" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -122,7 +122,7 @@
               {% endif %}
               </ul>
             </div>
->>>>>>> f17198c0d91c07da7afb6aa39dd677288c3a10d0
+
         {% if user.is_authenticated %}
           <div class="d-md-flex flex-grow-1 d-none" id="navbarNavDropdown">
             <ul class="navbar-nav ms-auto">
@@ -151,19 +151,18 @@
           <i class="bi bi-person-fill me-3"></i>
           <span class="menu-collapsed">Profile</span>
       </a>
-<<<<<<< HEAD
+
 <!--      <a href="/calculator" class="bg-dark">-->
 <!--          <i class="bi bi-calculator-fill me-3"></i>-->
 <!--          <span class="menu-collapsed">Calculator</span>-->
 <!--      </a>-->
       <a href="/financial-analysis" class="bg-dark">
-=======
+
       <a href="/calculator" class="bg-dark">
           <i class="bi bi-calculator-fill me-3"></i>
           <span class="menu-collapsed">Calculator</span>
       </a>
       <!-- <a href="/financial-analysis" class="bg-dark">
->>>>>>> f17198c0d91c07da7afb6aa39dd677288c3a10d0
           <i class="bi bi-bar-chart-fill me-3"></i>
           <span class="menu-collapsed">Financial Model</span>
       </a> -->
@@ -250,7 +249,6 @@
 <!--                  </div>-->
 <!--                </a>-->
 
-<<<<<<< HEAD
 <!--                <a href="/calculator" class="bg-dark list-group-item list-group-item-action">-->
 <!--                  <div class="d-flex w-100 justify-content-start align-items-center">-->
 <!--                    <i class="bi bi-calculator-fill me-3"></i>-->
@@ -277,7 +275,7 @@
 <!--                        <span class="menu-collapsed">Scenario Reports</span>-->
 <!--                      </a>-->
 <!--                    </div>-->
-=======
+
                 <a href="/calculator" id="calc" class="bg-dark list-group-item list-group-item-action">
                   <div class="d-flex w-100 justify-content-start align-items-center">
                     <i class="bi bi-calculator-fill me-3"></i>
@@ -333,7 +331,7 @@
                       </div>
                     </div> -->
 
->>>>>>> f17198c0d91c07da7afb6aa39dd677288c3a10d0
+
 <!--                <a href="/analysis" class="bg-dark list-group-item list-group-item-action">-->
 <!--                  <div class="d-flex w-100 justify-content-start align-items-center">-->
 <!--                    <i class="bi bi-search me-3"></i>-->

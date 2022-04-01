@@ -19,13 +19,13 @@ from . import views
 from django.conf.urls import include, url
 from django.contrib.auth import views as auth_views
 from django.views.generic import TemplateView
-from calc import analysis , analysis01
+from calc import analysis
+
 
 urlpatterns=[
   path('',views.index),
   path('home/', views.get_profile, name = 'home'),
   path('calculator/', views.calculator_view, name = 'calculator'),
-  path('analysis/', views.analysis_view, name = 'analysis'),
   path('financial-analysis/', views.financial_analysis_view, name = 'financial_analysis'),
   path('financial-analysis/<str:key>/', views.financial_analysis_view, name = 'financial_analysis'),
   path('financial-analysis-report/', views.financial_analysis_report, name = 'financial_analysis_report'),

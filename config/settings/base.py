@@ -56,14 +56,10 @@ INSTALLED_APPS = [
     'calc',
     'import_export', #for importing excel data to database.
     'django_extensions',
-<<<<<<< HEAD
     'django_object_actions',
     'rest_framework',
     'adam',
     'django.contrib.gis'
-=======
-    'django_object_actions'
->>>>>>> f17198c0d91c07da7afb6aa39dd677288c3a10d0
 ]
 
 MIDDLEWARE = [
@@ -104,21 +100,13 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-<<<<<<< HEAD
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-=======
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
->>>>>>> f17198c0d91c07da7afb6aa39dd677288c3a10d0
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -188,10 +176,8 @@ MEDIA_ROOT = os.path.join(DATA_FILE_DIR, 'scripts')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
-<<<<<<< HEAD
+
 
 GDAL_LIBRARY_PATH = r'C:\Program Files\PostgreSQL\14\bin\libgdal-29.dll'
 
 GEOS_LIBRARY_PATH = r'C:\Program Files\PostgreSQL\14\bin\libgeos_c.dll'
-=======
->>>>>>> f17198c0d91c07da7afb6aa39dd677288c3a10d0

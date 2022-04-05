@@ -227,3 +227,38 @@ def check_area(request):
     else:
         return HttpResponse(json.dumps({'status': "bad request"}), content_type="application/json")
 
+
+@csrf_exempt
+def view_data(request):
+    if request.method == 'POST' and request.is_ajax():
+        player_no = request.POST.get('player')
+
+        query = '''select sales_person,contract_no,contract_type,sub_contract_type,advertiser,panel_no,
+                segment,segment_name,spots,value,from_date_str,to_date_str 
+                from adam_reservation where player_no = '{}' order by value desc
+                '''.format(player_no)
+        print(query)
+        cursor.execute(query)
+        view_data = []
+        if(cursor.rowcount > 0):
+            count = cursor.rowcount
+            for row in cursor.fetchall():
+                record = {}
+                record['sales_person'] = row[0]
+                record['contract_no'] = row[1]
+                record['contract_type'] = row[2]
+                record['sub_contract_type'] = row[3]
+                record['advertiser'] = row[4]
+                record['panel_no'] = row[5]
+                record['segment'] = row[6]
+                record['segment_name'] = row[7]
+                record['spots'] = row[8]
+                record['value'] = row[9]
+                record['from_date_str'] = row[10]
+                record['to_date_str'] = row[11]
+                view_data.append(record)
+        else:
+            count = 0
+
+        return HttpResponse(json.dumps({'status': "success", "data": list(view_data), "count": count}),
+                            content_type="application/json")

@@ -163,6 +163,9 @@
     div.dt-datetime table td.selectable button:hover {
     color:#000 !important;
     }
+    #reservation_data{
+        width: none !important;
+    }
   </style>
 <section class="main-container p-0 m-0">
   <div class="container p-0 m-0">
@@ -298,6 +301,44 @@
         <span class="visually-hidden">Loading...</span>
       </div>
     </div>
+
+        <!-- The Modal -->
+<div class="modal fade bd-example-modal-lg" id="myModal">
+  <div class="modal-dialog modal-xl" style="height:500px">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Reservation Data View</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="container-md mt-0">
+		<div class="rateAnalysisContainer bg-white adam_style">
+		  <div class="table-responsive">
+            <table class="table" id="reservation_data" style="width:100% !important; display:none;">
+                <thead>
+                        <tr>
+                            <th scope="col">Contract Number</th>
+                            <th scope="col">Contract Type</th>
+                            <th scope="col">Salesperson</th>
+                            <th scope="col">Advertiser</th>
+                            <th scope="col">segment</th>
+                            <th scope="col">From</th>
+                            <th scope="col">To</th>
+                            <th scope="col">Value</th>
+                        </tr>
+                </thead>
+            </table>
+            <span id="error_reservation"></span>
+		  </div>
+		</div>
+      </div>
+    </div>
+  </div>
+</div>
   </main>
  </section>
 <script src="{% static "calc/js/main.js" %}"></script>
@@ -492,9 +533,11 @@
                         installed = installed.split(' ')
                         installed = installed[0]
                       }
+
+                      link_data = '<a href="#" data-bs-toggle="modal" data-bs-target="#myModal" data-player_no='+player+' class="show_data" style="background: transparent;text-decoration: underline;">'+player+'</a>'
                       data_table = {
                         "Panel No": panel,
-                        "Player No": player,
+                        "Player No": link_data,
                         "Co ordinates": latlng,
                         "City": city,
                         "Market": market,
@@ -534,9 +577,9 @@
                                   ],
                         searching : true
                     });
-                    $('#min, #max').on('change', function () {
-                        table.draw();
-                    });
+<!--                    $('#min, #max').on('change', function () {-->
+<!--                        table.draw();-->
+<!--                    });-->
                 }else{
                      //alert("Panel Not available in the Polygon Area")
                      $('#onload').modal('show');
@@ -551,6 +594,60 @@
       location.reload();
     })
 
+    $(document).on("click", ".show_data", function (e) {
+        e.preventDefault();
+        $('#reservation_data').dataTable().fnDestroy();
+        var player = $(this).attr("data-player_no");
+        data = {"player": player}
+        $.ajax({
+            type:"POST",
+            async: false,
+            url: "/view_data/",
+            data: data,
+            dataType: 'json',
+            success: function(res){
+                console.log(res)
+                data = res['data']
+                count = res['count']
+                if(count > 0){
+                    data_response = []
+                    $.each(data, function(i,v){
+
+                        data_table = {
+                                "Contract Number": v['contract_no'],
+                                "Contract Type": v['contract_type'],
+                                "Salesperson": v['sales_person'],
+                                "Advertiser": v['advertiser'],
+                                "Segment": v['segment'],
+                                "From": v['from_date_str'],
+                                "To": v['to_date_str'],
+                                "Value": '$' + v['value']
+                              }
+                              data_response.push(data_table)
+                    })
+                    $("#reservation_data").show()
+                    var table = $('#reservation_data').dataTable( {
+                        data : data_response,
+                        //data : response,
+                        columns: [
+                                  {"data" : "Contract Number"},
+                                  {"data" : "Contract Type"},
+                                  {"data" : "Salesperson"},
+                                  {"data" : "Advertiser"},
+                                  {"data" : "Segment"},
+                                  {"data" : "From"},
+                                  {"data" : "To"},
+                                  {"data" : "Value"},
+                                  ],
+                        searching : true
+                    });
+                }else{
+                    $("#error_reservation").html("Reservation Data Not available")
+                }
+            }
+        })
+
+    })
 
   </script>
 

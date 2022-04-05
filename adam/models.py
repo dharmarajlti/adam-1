@@ -182,3 +182,38 @@ class SpatialPolygon(gis_models.Model):
         return self.poly
 
 #script for converting existing points
+
+
+class RegionMaster(models.Model):
+
+    code = models.CharField(max_length=10, verbose_name=u"Region Code", help_text=u"Region Code")
+    city = models.CharField(max_length=100,verbose_name=u"City")
+
+    class Meta:
+        verbose_name_plural = '    Region Master'
+
+
+class Reservation(models.Model):
+
+    from_date_str = models.CharField(max_length=50, verbose_name=u"From Date", editable=False, null=True,blank=True)
+    to_date_str = models.CharField(max_length=50, verbose_name=u"To Date", editable=False, null=True,blank=True)
+    sales_person = models.CharField(max_length=100, verbose_name=u"Sales Person", null=True, blank=True)
+    contract_no = models.CharField(max_length=100,verbose_name=u"Contract Number", null=True, blank=True)
+    contract_type = models.CharField(max_length=100, verbose_name=u"Contract Type", null=True, blank=True)
+    sub_contract_type = models.CharField(max_length=100, verbose_name=u"Sub Contract Type", null=True, blank=True)
+    advertiser = models.CharField(max_length=100, verbose_name=u"Advertiser", null=True, blank=True)
+    panel_no = models.CharField(max_length=100, verbose_name=u"Panel Number", null=True, blank=True)
+    segment = models.CharField(max_length=100, verbose_name=u"Segment", null=True, blank=True)
+    segment_name = models.CharField(max_length=100, verbose_name=u"Segment Name", null=True, blank=True)
+    weekdays = models.CharField(max_length=100, verbose_name=u"Weekdays", null=True, blank=True)
+    spots = models.IntegerField(verbose_name=u"Spots", null=True, blank=True)
+    value = models.FloatField(verbose_name=u"Value", null=True, blank=True)
+    contract_sign_date_str = models.CharField(max_length=50, verbose_name=u"Contract Signed On", editable=False, null=True, blank=True)
+    contract_date_check = models.IntegerField(verbose_name=u"Contract Date Check", null=True, blank=True)
+    ae_no = models.CharField(max_length=100, verbose_name=u"AE#", null=True, blank=True)
+    player_no = models.CharField(max_length=100, verbose_name=u"Player Number", null=True, blank=True)
+    from_date = models.DateField(verbose_name=u"From Date", null=True, blank=True)
+    to_date = models.DateField(verbose_name=u"To Date", null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = '    Reservation'

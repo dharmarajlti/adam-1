@@ -51,6 +51,7 @@
     }
     .mapboxgl-popup-content {
         min-width:200px;
+        z-index:2;
     }
 
     .my-legend .legend-title {
@@ -175,7 +176,7 @@
 
         </div>
         <div class="col-4 text-center">
-          <a class="blog-header-logo text-dark text-decoration-none" href="#"> SEARCH PANEL </a>
+          <a class="blog-header-logo text-dark text-decoration-none" href="#"> </a>
         </div>
         <div class="col-4 d-flex justify-content-end align-items-center">
 
@@ -199,7 +200,7 @@
             <input id="streets-v11" type="radio" name="rtoggle" value="streets" checked="checked">
             <label for="streets-v11">streets</label>
       </div>
-      <div id="map" class="map mb-3" style='height: 500px; margin:0 auto;'></div>
+      <div id="map" class="map mb-3" style='height: 600px; margin:0 auto;'></div>
       <div class="calculation-box" style="display:none">
         <p>Click the map to draw a polygon.</p>
         <div id="calculated-area"></div>
@@ -273,6 +274,7 @@
                             <th scope="col">City </th>
                             <th scope="col">Market</th>
                             <th scope="col">Media Type</th>
+                            <th scope="col">Week Impressions</th>
                             <th scope="col">Installed On</th>
                         </tr>
                 </thead>
@@ -433,15 +435,15 @@
     function updateArea(e) {
       const data = draw.getAll();
       polygon_len = final_cods.length
-      if(polygon_len < 5){
+      if(polygon_len < 3){
         //alert("Kindly draw the polygon only Five points are needed")
         $('#onload').modal('show');
-        $('#alertMsg1').html("Kindly draw the polygon only Five points are needed")
+        $('#alertMsg1').html("Kindly draw the polygon Minimum Three points are needed")
         return false
-      }else if(polygon_len > 5){
+      }else if(polygon_len > 10){
         //alert("Kindly draw the polygon only Five points are needed")
         $('#onload').modal('show');
-        $('#alertMsg1').html("Kindly draw the polygon only Five points are needed")
+        $('#alertMsg1').html("Kindly draw the polygon Minimum Three or Maximum Ten points are needed")
         return false
       }
       //console.log(draw)
@@ -542,6 +544,7 @@
                         "City": city,
                         "Market": market,
                         "Media Type": mediatype,
+                        "Week Impressions": impressions,
                         "Installed On": installed
                       }
                       data_response.push(data_table)
@@ -552,7 +555,7 @@
                       }
                       const marker1 = new mapboxgl.Marker({ "color": color })
                       .setLngLat([v['longitude'], v['latitude']])
-                      .setPopup(new mapboxgl.Popup().setHTML('<div><p>'+latlng+'</p><p>'+city+'</p><p>'+panel+'</p><p>'+player+'</p><p>'+market+'</p><p>'+mediatype+'</p><p>'+impressions+'</p></div>'))
+                      .setPopup(new mapboxgl.Popup().setHTML('<table class="pop-attr table table-bordered"><tr><td><b>Lat & Lng</b></td><td>'+latlng+'</td></tr><tr><td><b>City</b></td><td>'+city+'</td></tr><tr><td><b>Panel</b></td><td>'+panel+'</td></tr><tr><td><b>Player no</b></td><td>'+player+'</td></tr><tr><td><b>Market</b></td><td>'+market+'</td></tr><tr><td><b>Media Type</b></td><td>'+mediatype+'</td></tr><tr><td><b>Impressions</b></td><td>'+impressions+'</td></tr></table>'))
                       .addTo(map);
                       //marker1.togglePopup();
 
@@ -573,6 +576,7 @@
                                   {"data" : "City"},
                                   {"data" : "Market"},
                                   {"data" : "Media Type"},
+                                  {"data" : "Week Impressions"},
                                   {"data" : "Installed On"}
                                   ],
                         searching : true
@@ -648,7 +652,9 @@
         })
 
     })
-
+    $(document).on("click", ".mapbox-gl-draw_trash", function (e) {
+        alert("test")
+    })
   </script>
 
 {% endblock %}

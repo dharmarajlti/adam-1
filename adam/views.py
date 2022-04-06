@@ -80,10 +80,11 @@ def view_address(request):
                 record['media_type'] = row[6]
                 record['sub_market'] = row[5]
                 record['unit_type'] = row[7]
+                record['wk4_imp'] = row[13]
 
                 address_data.append(record)
 
-        print(address_data)
+        # print(address_data)
         context = {
                     'user_id': request.user.id,
                     'address_data': address_data
@@ -151,14 +152,18 @@ def check_area(request):
         cods = json.loads(cods)
         # geo_polygon = Polygon(( (0.0, 0.0), (0.0, 50.0), (50.0, 50.0), (50.0, 0.0), (0.0, 0.0) ))
 
-        geo_polygon = Polygon((
-            (cods[0][0], cods[0][1]),
-            (cods[1][0], cods[1][1]),
-            (cods[2][0], cods[2][1]),
-            (cods[3][0], cods[3][1]),
-            (cods[4][0], cods[4][1]),
-            (cods[0][0], cods[0][1])
-        ), srid=4326)
+        points = tuple((c[0], c[1]) for c in cods) + ((cods[0][0], cods[0][1]),)
+        print(points)
+        # geo_polygon = Polygon((
+        #     (cods[0][0], cods[0][1]),
+        #     (cods[1][0], cods[1][1]),
+        #     (cods[2][0], cods[2][1]),
+        #     (cods[3][0], cods[3][1]),
+        #     (cods[4][0], cods[4][1]),
+        #     (cods[5][0], cods[5][1]),
+        #     (cods[0][0], cods[0][1])
+        # ), srid=4326)
+        geo_polygon = Polygon(points, srid=4326)
         poly = SpatialPolygon.objects.create(poly=geo_polygon)
         poly.save()
         # filter = geo_polygon.within(SpatialPanel.objects.all())
@@ -237,7 +242,7 @@ def view_data(request):
                 segment,segment_name,spots,value,from_date_str,to_date_str 
                 from adam_reservation where player_no = '{}' order by value desc
                 '''.format(player_no)
-        print(query)
+        # print(query)
         cursor.execute(query)
         view_data = []
         if(cursor.rowcount > 0):

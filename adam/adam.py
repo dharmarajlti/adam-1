@@ -39,7 +39,8 @@ def file_config(**kwargs):
                                      'Contract Number (Subcontract)', 'Advertiser (Subcontract: Contract)',
                                      'Subcontract Type (Subcontract)', 'Player (Location)', 'Segment',
                                      'Weekdays', 'Spots', 'Value', 'Signed On (Subcontract: Contract)',
-                                     'Contract Date Check', 'AE#', 'Player Number', 'Segment Name']
+                                     'Contract Date Check', 'AE#', 'Player Number', 'Segment Name'],
+                    'Market_Code': ['market', 'code']
                     }
     file_data = filter_file and dict(filter(lambda elem: elem[0] in filter_file, file_data.items())) or file_data
     return file_data
@@ -49,16 +50,14 @@ def excel_to_csv(excelfile,**kwargs):
     import numpy
     # excelfile = 'D:\LTI Work\Documents\Adams\All_panels_attributes_input.xlsx'
     xl = pd.ExcelFile(excelfile)
-    sheet_list = ['All Panels','Inv Static','Inv Players','Reservations']
-    for sheet in sheet_list:
+    # sheet_list = ['All Panels','Inv Static','Inv Players','Reservations','Market Code']
+    for sheet in xl.sheet_names:
         fsheet = sheet.replace(" ", "_")
         kwargs['filter_file'] = [fsheet]
         file_data = file_config(**kwargs)
         file_columns = file_data and file_data.get(fsheet) or []
         if os.path.exists(excelfile):
             tablename = False
-            sub_tablename = False
-            sub_df = False
             df = pd.read_excel(excelfile, sheet_name=sheet, usecols=file_columns)
             df = df.replace({"^\s*|\s*$": ""}, regex=True)
             rows_with_nan = [index for index, row in df.iterrows() if (row.isnull().all())]
@@ -108,9 +107,6 @@ def excel_to_csv(excelfile,**kwargs):
                                   'Code' : 'code'}
                 df.rename(columns=columns_rename, inplace=True)
                 tablename = 'adam_panelplayerdetails'
-                sub_df = pd.DataFrame(df, columns=['code', 'city'])
-                sub_df.drop_duplicates(inplace=True)
-                sub_tablename = 'adam_regionmaster'
             if sheet == 'Reservations':
                 columns_rename = {'From': 'from_date_str',
                                   'To': 'to_date_str',
@@ -134,6 +130,11 @@ def excel_to_csv(excelfile,**kwargs):
                 df['value'] = df['value'].replace(np.nan, 0.00, regex=True)
                 df['contract_date_check'] = df['contract_date_check'].replace(np.nan, 0, regex=True)
                 tablename = 'adam_reservation'
+            if sheet == 'Market_Code':
+                columns_rename = {'code': 'code',
+                                  'market': 'market'}
+                df.rename(columns=columns_rename, inplace=True)
+                tablename = 'adam_marketmaster'
             df.drop_duplicates(inplace=True)
             ### Starts Here ###
             from django.db import connection
@@ -148,8 +149,6 @@ def excel_to_csv(excelfile,**kwargs):
             engine = create_engine(f'{dialect}://{user}:{pwd}@{host}:{port}/{db_name}')
             Session = sessionmaker(bind=engine)
             with Session() as session:
-                if sub_tablename:
-                    sub_df.to_sql(sub_tablename, con=engine, if_exists='append', index=False)
                 if tablename:
                     df.to_sql(tablename, con=engine, if_exists='append', index=False)
             from django.contrib.gis.geos.point import Point

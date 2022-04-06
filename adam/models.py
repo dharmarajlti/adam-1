@@ -184,13 +184,13 @@ class SpatialPolygon(gis_models.Model):
 #script for converting existing points
 
 
-class RegionMaster(models.Model):
+class MarketMaster(models.Model):
 
-    code = models.CharField(max_length=10, verbose_name=u"Region Code", help_text=u"Region Code")
-    city = models.CharField(max_length=100,verbose_name=u"City")
+    code = models.CharField(max_length=10, verbose_name=u"Market Code", help_text=u"Market Code")
+    market = models.CharField(max_length=100,verbose_name=u"Market")
 
     class Meta:
-        verbose_name_plural = '    Region Master'
+        verbose_name_plural = '    Market Master'
 
 
 class Reservation(models.Model):

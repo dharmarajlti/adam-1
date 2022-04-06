@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.gis import admin as gis_admin
 from .models import PanelMaster, PanelStaticDetails, PanelPlayerDetails,PanelDocument,\
-    SpatialPoint, SpatialPolygon, RegionMaster, Reservation
+    SpatialPoint, SpatialPolygon, MarketMaster, Reservation
 from django_object_actions import DjangoObjectActions
 from django.core.exceptions import ValidationError
 from .adam import excel_to_csv
@@ -110,12 +110,10 @@ class SecureOSM(gis_admin.GeoModelAdmin):
 gis_admin.site.register(SpatialPoint, SecureOSM)
 
 
-class RegionMasterAdmin(admin.ModelAdmin):
-    list_display = ('code','city',)
-    search_fields = ['code','city']
-
-
-admin.site.register(RegionMaster, RegionMasterAdmin)
+class MarketMasterAdmin(admin.ModelAdmin):
+    list_display = ('code','market',)
+    search_fields = ['code','market']
+admin.site.register(MarketMaster, MarketMasterAdmin)
 
 
 class ReservationAdmin(admin.ModelAdmin):

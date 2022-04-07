@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import AddressSerializers
-from .models import PanelMaster, SpatialPolygon
+from .models import PanelMaster, SpatialPolygon, RegionMaster
 from django.views.decorators.csrf import csrf_exempt
 from django.db import connection
 cursor = connection.cursor()
@@ -85,14 +85,57 @@ def view_address(request):
                 address_data.append(record)
 
         # print(address_data)
+        region_city = RegionMaster.objects.all()
+        # print(list(region_city))
         context = {
                     'user_id': request.user.id,
-                    'address_data': address_data
+                    'address_data': address_data,
+                    'region_city': list(region_city)
                 }
 
         return render(request, 'adam/view_address.html', context)
     return redirect('login')
 
+
+@csrf_exempt
+def view_panel_details(request):
+    if request.method == 'POST' and request.is_ajax():
+        city = request.POST.get('city')
+
+        address_data = []
+        query = '''select panel.panel_no,panel_st.player_no,panel.latitude,panel.longitude,panel.market_name,
+                            panel_st.submarket,panel_st.media_type,panel_st.unit_type,
+                            panel.status,panel_st.description,panel_st.code,
+                            panel_st.city,panel_st.site,panel_st.wk4_imp,panel_st.media_type,
+                            translate(panel_st.player_no,panel_st.code||'-','') as panel_st_panel_code
+                            from adam_panelstaticdetails panel_st
+                            join adam_panelmaster panel
+                            --on panel.panel_no = translate(panel_st.player_no,panel_st.code||'-','') 
+                            on panel.panel_no = panel_st.panel_no
+                            and panel_st.city='{}'
+                        '''.format(city)
+        cursor.execute(query)
+        if (cursor.rowcount > 0):
+            count = cursor.rowcount
+            for row in cursor.fetchall():
+                record = {}
+                record['panel_no'] = row[0]
+                record['player_no'] = row[1]
+                record['market_name'] = row[4]
+                record['longitude'] = row[3]
+                record['latitude'] = row[2]
+                record['description'] = row[9]
+                record['city'] = row[11]
+                record['media_type'] = row[6]
+                record['sub_market'] = row[5]
+                record['unit_type'] = row[7]
+                record['wk4_imp'] = row[13]
+
+                address_data.append(record)
+        else:
+            count = 0
+        return HttpResponse(json.dumps({'status': "success", "data": list(address_data), "count": count}),
+                            content_type="application/json")
 
 def find_address(request):
     return render(request, 'adam/find_address.html')
@@ -204,7 +247,8 @@ def check_area(request):
                             panel_st.installed_date_str
                             from adam_panelstaticdetails panel_st
                             join adam_panelmaster panel
-                            on panel.panel_no = translate(panel_st.player_no,panel_st.code||'-','')
+                            --on panel.panel_no = translate(panel_st.player_no,panel_st.code||'-','')
+                            on panel.panel_no = panel_st.panel_no
                             and panel.id in (
                             select unnest(string_to_array('{}', ',')):: numeric)
                         '''.format(pid)

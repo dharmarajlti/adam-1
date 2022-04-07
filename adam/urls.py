@@ -13,5 +13,6 @@ urlpatterns = [
     path('find_address/', views.find_address),
     path('add_address/', views.create_address),
     path('check_area/', views.check_area),
-    path('view_data/', views.view_data)
+    path('view_data/', views.view_data),
+    path('view_panel_details/', views.view_panel_details)
 ]

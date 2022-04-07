@@ -53,11 +53,11 @@
      .adam_style .table tbody > tr > td a {
        color: #000;
      }
-     .adam_style #rateAnalysis_wrapper #rateAnalysis_paginate .paginate_button.disabled
+     .adam_style #panel_details_data_wrapper #panel_details_data_paginate .paginate_button.disabled
         {
        background: #54b4f0;
      }
-     .adam_style #rateAnalysis_wrapper #rateAnalysis_paginate .paginate_button
+     .adam_style #panel_details_data_wrapper #panel_details_data_paginate .paginate_button
      {
       background: #54b4f0;
      }
@@ -66,8 +66,15 @@
     <div class="container-md my-4">
         <div class="rateAnalysisContainer bg-white adam_style">
             <h5>View Panel</h5>
+            <div style="float:left">City:</div>
+            <select class="form-select region_city"  style="width:230px;" id="city_name" name="city_name" aria-label="Default select example">
+              {% for region in region_city %}
+
+                <option selected={{selected}} value={{region.city}}>{{region.city}}</option>
+             {% endfor %}
+            </select>
             <div class="table-responsive">
-                <table class="table" id="rateAnalysis">
+                <table class="table" id="panel_details_data">
                     <thead>
                         <tr>
                            <th scope="col">Panel No</th>
@@ -78,50 +85,40 @@
                             <th scope="col">City</th>
                             <th scope="col">Media Type</th>
                             <th scope="col">Sub Market</th>
+                            <th scope="col">Week Impressions</th>
                             <th scope="col">Unit Type</th>
                         </tr>
                     </thead>
-                    <tbody>
-                       {% for add in address_data %}
-                        <tr>
-                            <td >{{add.panel_no}}</td>
-                            <td>{{add.player_no}}</td>
-                            <td>{{add.market_name}}</td>
-                            <td>
-                                <a href="#" class="map-btn button" data-bs-toggle="modal" data-bs-target="#myModal"
-                                   style="background: transparent;text-decoration: underline;"
-                                   data-latLng="{{add.longitude}},{{add.latitude}}" data-panel="{{add.panel_no}}"
-                                data-player_no="{{add.player_no}}" data-market_name="{{add.market_name}}">
-                                    {{add.longitude}},{{add.latitude}}
-                                </a>
-                            </td>
-                            <td>{{add.description}}</td>
-                            <td>{{add.city}}</td>
-                            <td>{{add.media_type}}</td>
-                            <td>{{add.sub_market}}</td>
-                            <td>{{add.unit_type}}</td>
-
+<!--                    <tbody>-->
+<!--                       {% for add in address_data %}-->
+<!--                        <tr>-->
+<!--                            <td >{{add.panel_no}}</td>-->
 <!--                            <td>-->
-<!--                                <div class="crud">-->
-<!--                                    {% if request.user.is_superuser %}-->
-<!--                                        <a class="bi bi-pencil-fill" href="#"></a>-->
-<!--                                    {% else %}-->
-
-<!--                                        {% if scenario.status == 'pending' %}-->
-<!--                                            <a class="bi bi-pencil-fill" href="/financial-analysis/rate_analysis_id={{ scenario.id }}"-->
-<!--                                            data-toggle="tooltip" data-placement="top" title="Edit"></a>-->
-<!--                                            &nbsp;&nbsp;&nbsp;&nbsp;-->
-<!--                                            <button class="bi bi-pencil-fill btn-approve" value="{{ scenario.id }}" data-toggle="tooltip" data-placement="top" title="Approve"></button>-->
-<!--                                            &nbsp;&nbsp;&nbsp;&nbsp;-->
-<!--                                            <button class="bi bi-pencil-fill btn-reject" value="{{ scenario.id }}" data-toggle="tooltip" data-placement="top" title="Reject"></button>-->
-<!--                                        {% endif %}-->
-<!--                                    {% endif %}-->
-<!--                                </div>-->
+<!--                                <a href="#" class="map-btn player_button" data-player_no="{{add.player_no}}"-->
+<!--                                   data-bs-toggle="modal" data-bs-target="#myModal_1"-->
+<!--                                   style="background: transparent;text-decoration: underline;">-->
+<!--                                    {{add.player_no}}-->
+<!--                                </a>-->
 <!--                            </td>-->
+<!--                            <td>{{add.market_name}}</td>-->
+<!--                            <td>-->
+<!--                                <a href="#" class="map-btn button" data-bs-toggle="modal" data-bs-target="#myModal"-->
+<!--                                   style="background: transparent;text-decoration: underline;"-->
+<!--                                   data-latLng="{{add.longitude}},{{add.latitude}}" data-panel="{{add.panel_no}}"-->
+<!--                                data-player_no="{{add.player_no}}" data-market_name="{{add.market_name}}">-->
+<!--                                    {{add.longitude}},{{add.latitude}}-->
+<!--                                </a>-->
+<!--                            </td>-->
+<!--                            <td>{{add.description}}</td>-->
+<!--                            <td>{{add.city}}</td>-->
+<!--                            <td>{{add.media_type}}</td>-->
+<!--                            <td>{{add.sub_market}}</td>-->
+<!--                            <td>{{add.unit_type}}</td>-->
 
-                        </tr>
-                    {% endfor %}
-                    </tbody>
+
+<!--                        </tr>-->
+<!--                    {% endfor %}-->
+<!--                    </tbody>-->
                     <tfoot>
 <!--                    <td colspan="8"><span class="fw-bold">{{ address_data|length }} Total</span></td>-->
                     </tfoot>
@@ -163,7 +160,43 @@
     </div>
   </div>
 </div>
+        <!-- The Modal -->
+<div class="modal fade bd-example-modal-lg" id="myModal_1">
+  <div class="modal-dialog modal-xl" style="height:500px">
+    <div class="modal-content">
 
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Reservation Data View</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="container-md mt-0">
+		<div class="rateAnalysisContainer bg-white adam_style">
+		  <div class="table-responsive">
+            <table class="table" id="reservation_data" style="width:100% !important; display:none;">
+                <thead>
+                        <tr>
+                            <th scope="col">Contract Number</th>
+                            <th scope="col">Contract Type</th>
+                            <th scope="col">Salesperson</th>
+                            <th scope="col">Advertiser</th>
+                            <th scope="col">segment</th>
+                            <th scope="col">From</th>
+                            <th scope="col">To</th>
+                            <th scope="col">Value</th>
+                        </tr>
+                </thead>
+            </table>
+            <span id="error_reservation"></span>
+		  </div>
+		</div>
+      </div>
+    </div>
+  </div>
+</div>
                 <div class="col-md-12">
 
             </div>
@@ -210,6 +243,131 @@
                 .addTo(map);
             marker1.togglePopup();
         });
+
+    $(document).on("click", ".player_button", function (e) {
+        e.preventDefault();
+        var table = $('#reservation_data').DataTable();
+        table.destroy()
+        var player = $(this).attr("data-player_no");
+        show_reservation_data(player)
+
+    })
+    function show_reservation_data(player){
+
+        data = {"player": player}
+            $.ajax({
+                type:"POST",
+                async: false,
+                url: "/view_data/",
+                data: data,
+                dataType: 'json',
+                success: function(res){
+                    console.log(res)
+                    data = res['data']
+                    count = res['count']
+                    if(count > 0){
+                        data_response = []
+                        $.each(data, function(i,v){
+
+                            data_table = {
+                                    "Contract Number": v['contract_no'],
+                                    "Contract Type": v['contract_type'],
+                                    "Salesperson": v['sales_person'],
+                                    "Advertiser": v['advertiser'],
+                                    "Segment": v['segment'],
+                                    "From": v['from_date_str'],
+                                    "To": v['to_date_str'],
+                                    "Value": '$' + v['value']
+                                  }
+                                  data_response.push(data_table)
+                        })
+                        $("#reservation_data").show()
+                        var table = $('#reservation_data').dataTable( {
+                            data : data_response,
+                            //data : response,
+                            columns: [
+                                      {"data" : "Contract Number"},
+                                      {"data" : "Contract Type"},
+                                      {"data" : "Salesperson"},
+                                      {"data" : "Advertiser"},
+                                      {"data" : "Segment"},
+                                      {"data" : "From"},
+                                      {"data" : "To"},
+                                      {"data" : "Value"},
+                                      ],
+                            searching : true
+                        });
+                    }else{
+                        $("#error_reservation").html("Reservation Data Not available")
+                    }
+                }
+            })
+    }
+    $(document).on("change", ".region_city", function (e) {
+        city = $(this).val()
+        var table = $('#panel_details_data').DataTable();
+        table.destroy()
+        display_data(city)
+
+    })
+
+    $(document).ready(function(){
+        city = $("#city_name").val()
+        display_data(city)
+    })
+
+    function display_data(region, table_name){
+        data = {"city": region}
+        $.ajax({
+            type:"POST",
+            async: false,
+            url: "/view_panel_details/",
+            data: data,
+            dataType: 'json',
+            success: function(res){
+                data = res['data']
+                data_response = []
+                $.each(data, function(i,v){
+                    lng_lat = v['longitude'] +','+ v['latitude']
+                    player_data = '<a href="#" class="map-btn player_button" data-player_no='+v['player_no']+' data-bs-toggle="modal" data-bs-target="#myModal_1" style="background: transparent;text-decoration: underline;">'+v['player_no']+'</a>'
+                    link_data = '<a href="#" class="map-btn button" data-latLng='+lng_lat+' data-panel='+v['panel_no']+' data-player_no='+v['player_no']+' data-market_name='+v['market_name']+' data-bs-toggle="modal" data-bs-target="#myModal" style="background: transparent;text-decoration: underline;">'+lng_lat+'</a>'
+                    data_table = {
+                        "Panel No": v['panel_no'] ,
+                        "Player No": player_data,
+                        "Market": v['market_name'],
+                        "Co ordinates": link_data,
+                        "Description": v['description'],
+                        "City": v['city'],
+                        "Media Type": v['media_type'],
+                        "Sub Market": v['sub_market'],
+                        "Week Impressions": v['wk4_imp'],
+                        "Unit Type": v['unit_type']
+                      }
+                      data_response.push(data_table)
+                })
+
+                var table = $('#panel_details_data').dataTable( {
+                        data : data_response,
+                        //data : response,
+                        columns: [
+                                  {"data" : "Panel No"},
+                                  {"data" : "Player No"},
+                                  {"data" : "Market"},
+                                  {"data" : "Co ordinates"},
+                                  {"data" : "Description"},
+                                  {"data" : "City"},
+                                  {"data" : "Media Type"},
+                                  {"data" : "Sub Market"},
+                                  {"data" : "Week Impressions"},
+                                  {"data" : "Unit Type"}
+                                  ],
+                        searching : true
+                    });
+            }
+
+        })
+
+    }
     </script>
 <!--<script src="{% static "calc/js/main.js" %}"></script>-->
 {% endblock %}

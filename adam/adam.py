@@ -40,7 +40,7 @@ def file_config(**kwargs):
                                      'Subcontract Type (Subcontract)', 'Player (Location)', 'Segment',
                                      'Weekdays', 'Spots', 'Value', 'Signed On (Subcontract: Contract)',
                                      'Contract Date Check', 'AE#', 'Player Number', 'Segment Name'],
-                    'Market_Code': ['market', 'code']
+                    'Market_Code': ['market', 'code'],
                     }
     file_data = filter_file and dict(filter(lambda elem: elem[0] in filter_file, file_data.items())) or file_data
     return file_data
@@ -58,6 +58,8 @@ def excel_to_csv(excelfile,**kwargs):
         file_columns = file_data and file_data.get(fsheet) or []
         if os.path.exists(excelfile):
             tablename = False
+            sub_tablename = False
+            sub_df = False
             df = pd.read_excel(excelfile, sheet_name=sheet, usecols=file_columns)
             df = df.replace({"^\s*|\s*$": ""}, regex=True)
             rows_with_nan = [index for index, row in df.iterrows() if (row.isnull().all())]
@@ -93,6 +95,9 @@ def excel_to_csv(excelfile,**kwargs):
                                   'Description' : 'description'}
                 df.rename(columns = columns_rename, inplace = True)
                 tablename = 'adam_panelstaticdetails'
+                sub_df = pd.DataFrame(df, columns=['code', 'city'])
+                sub_df.drop_duplicates(inplace=True)
+                sub_tablename = 'adam_regionmaster'
             if sheet == 'Inv_Players':
                 columns_rename = {'Player' : 'player_no',
                                   'Site #' : 'site',
@@ -149,6 +154,8 @@ def excel_to_csv(excelfile,**kwargs):
             engine = create_engine(f'{dialect}://{user}:{pwd}@{host}:{port}/{db_name}')
             Session = sessionmaker(bind=engine)
             with Session() as session:
+                if sub_tablename:
+                    sub_df.to_sql(sub_tablename, con=engine, if_exists='append', index=False)
                 if tablename:
                     df.to_sql(tablename, con=engine, if_exists='append', index=False)
             from django.contrib.gis.geos.point import Point

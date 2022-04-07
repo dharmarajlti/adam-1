@@ -193,6 +193,15 @@ class MarketMaster(models.Model):
         verbose_name_plural = '    Market Master'
 
 
+class RegionMaster(models.Model):
+
+    code = models.CharField(max_length=10, verbose_name=u"Region Code", help_text=u"Region Code")
+    city = models.CharField(max_length=100,verbose_name=u"City")
+
+    class Meta:
+        verbose_name_plural = '    Region Master'
+
+
 class Reservation(models.Model):
 
     from_date_str = models.CharField(max_length=50, verbose_name=u"From Date", editable=False, null=True,blank=True)

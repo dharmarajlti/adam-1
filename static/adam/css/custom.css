@@ -756,3 +756,88 @@
   color: #ffffff;
   opacity: 0.7;
 }
+
+/*----------------*/
+
+.rateAnalysisContainer #panel_details_data_wrapper,
+.rateAnalysisChangeContainer #panel_details_data_wrapper {
+  margin-top: 15px;
+}
+
+.rateAnalysisContainer #panel_details_data_wrapper #panel_details_data_filter label,
+.rateAnalysisChangeContainer #panel_details_data_wrapper #panel_details_data_filter label {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 15px;
+  font-size: 15px;
+}
+
+.rateAnalysisContainer #panel_details_data_wrapper #panel_details_data_filter label input,
+.rateAnalysisChangeContainer #panel_details_data_wrapper #panel_details_data_filter label input {
+  border: 1px solid darkgray;
+  -webkit-box-shadow: 1px 2px 5px darkgrey;
+          box-shadow: 1px 2px 5px darkgrey;
+  padding: 10px;
+}
+
+.rateAnalysisContainer #panel_details_data_wrapper #panel_details_data_length label,
+.rateAnalysisChangeContainer #panel_details_data_wrapper #panel_details_data_length label {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 10px;
+  font-size: 15px;
+}
+
+.rateAnalysisContainer #panel_details_data_wrapper #panel_details_data_length label select,
+.rateAnalysisChangeContainer #panel_details_data_wrapper #panel_details_data_length label select {
+  border: 1px solid darkgray;
+  padding: 5px;
+}
+
+.rateAnalysisContainer #panel_details_data_wrapper #panel_details_data_info,
+.rateAnalysisChangeContainer #panel_details_data_wrapper #panel_details_data_info {
+  font-size: 15px;
+}
+
+.rateAnalysisContainer #panel_details_data_wrapper #panel_details_data_paginate,
+.rateAnalysisChangeContainer #panel_details_data_wrapper #panel_details_data_paginate {
+  font-size: 15px;
+  margin-bottom: 15px;
+}
+
+.rateAnalysisContainer #panel_details_data_wrapper #panel_details_data_paginate .paginate_button,
+.rateAnalysisChangeContainer #panel_details_data_wrapper #panel_details_data_paginate .paginate_button {
+  border: none;
+  background: #4599b3;
+  color: #ffffff !important;
+  opacity: 1;
+  padding: 10px 20px;
+  -webkit-transition: 0.3s ease;
+  transition: 0.3s ease;
+}
+
+.rateAnalysisContainer #panel_details_data_wrapper #panel_details_data_paginate .paginate_button:hover,
+.rateAnalysisChangeContainer #panel_details_data_wrapper #panel_details_data_paginate .paginate_button:hover {
+  background: #67a5b9;
+}
+
+.rateAnalysisContainer #panel_details_data_wrapper #panel_details_data_paginate .paginate_button.current,
+.rateAnalysisChangeContainer #panel_details_data_wrapper #panel_details_data_paginate .paginate_button.current {
+  background: #0e1941;
+  color: #ffffff;
+}
+
+.rateAnalysisContainer #panel_details_data_wrapper #panel_details_data_paginate .paginate_button.disabled,
+.rateAnalysisChangeContainer #panel_details_data_wrapper #panel_details_data_paginate .paginate_button.disabled {
+  background: #4599b3;
+  color: #ffffff;
+  opacity: 0.7;
+}

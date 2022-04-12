@@ -216,31 +216,31 @@
         <div class='legend-scale'>
           <table class="table table-bordered">
             <tbody>
-              <tr>
+              <tr class="media_marker" data-media_type="Bulletin">
                 <td scope="row"><i class="fa fa-map-marker fa-2x align-middle mr-2" aria-hidden="true" style="color: #fcb103"></i></td>
                 <td>Bulletin </td>
               </tr>
-              <tr>
+              <tr class="media_marker" data-media_type="Custom Bulletin">
                 <td scope="row"><i class="fa fa-map-marker fa-2x align-middle mr-2" aria-hidden="true" style="color: #ebfc03"></i></td>
                 <td> Custom Bulletin </td>
               </tr>
-              <tr>
+              <tr class="media_marker" data-media_type="Jr Poster">
                 <td scope="row"><i class="fa fa-map-marker fa-2x align-middle mr-2" aria-hidden="true" style="color: #03fcb1"></i></td>
                 <td>Jr Poster</td>
               </tr>
-              <tr>
+              <tr class="media_marker" data-media_type="Kiosk">
                 <td scope="row"><i class="fa fa-map-marker fa-2x align-middle mr-2" aria-hidden="true" style="color: #8c8cbf"></i></td>
                 <td>Kiosk</td>
               </tr>
-              <tr>
+              <tr class="media_marker" data-media_type="Managed Digital">
                 <td scope="row"><i class="fa fa-map-marker fa-2x align-middle mr-2" aria-hidden="true" style="color: #fc03ba"></i></td>
                 <td>Managed Digital</td>
               </tr>
-              <tr>
+              <tr class="media_marker" data-media_type="Parking Deck Display">
                 <td scope="row"><i class="fa fa-map-marker fa-2x align-middle mr-2" aria-hidden="true" style="color: #351d6e"></i></td>
                 <td>Parking Deck Display</td>
               </tr>
-              <tr>
+              <tr class="media_marker" data-media_type="Poster">
                 <td scope="row"><i class="fa fa-map-marker fa-2x align-middle mr-2" aria-hidden="true" style="color: #8c1921"></i></td>
                 <td>Poster</td>
               </tr>
@@ -353,7 +353,6 @@
             var min = minDate.val();
             var max = maxDate.val();
             var date = new Date( data[4] );
-            console.log("00", date)
             if (
                 ( min === null && max === null ) ||
                 ( min === null && date <= max ) ||
@@ -367,6 +366,17 @@
     );
     $(document).ready(function() {
         $(".buttons-html5 span").html('Export')
+        $(".mapbox-gl-draw_trash").addClass('map_delete')
+        $(".mapbox-gl-draw_polygon").addClass('draw_ploy')
+
+        $('.draw_ploy').click(function(){
+            console.log("test")
+            alert("test")
+        })
+        $('.map_delete').click(function(){
+            console.log("test2")
+            alert("test2")
+        })
 
         // Create date inputs
         minDate = new DateTime($('#min'), {
@@ -550,12 +560,17 @@
                       }else{
                         color = "#198754"
                       }
+                      add_class = ''
+                      add_class = mediatype
+
+
                       const marker1 = new mapboxgl.Marker({ "color": color })
                       .setLngLat([v['longitude'], v['latitude']])
                       .setPopup(new mapboxgl.Popup().setHTML('<table class="pop-attr table table-bordered"><tr><td><b>Lat & Lng</b></td><td>'+latlng+'</td></tr><tr><td><b>City</b></td><td>'+city+'</td></tr><tr><td><b>Panel</b></td><td>'+panel+'</td></tr><tr><td><b>Player no</b></td><td>'+player+'</td></tr><tr><td><b>Market</b></td><td>'+market+'</td></tr><tr><td><b>Media Type</b></td><td>'+mediatype+'</td></tr><tr><td><b>Impressions</b></td><td>'+impressions+'</td></tr></table>'))
                       .addTo(map);
                       //marker1.togglePopup();
-
+                      $('.mapboxgl-canvas-container .mapboxgl-marker').addClass(add_class);
+                      $('.mapboxgl-marker').attr('media_value', add_class)
                       //address = 'v['city'] +","+ v['state'] +","+ v['country']'
                       address = 'N. Charleston'
                       //html += '<tr><td>'+latlng+'</td><td>'+address+'</td></tr>'
@@ -581,6 +596,7 @@
                         buttons: [
                             'excelHtml5'
                         ],
+                        order: [6, 'desc']
                     });
                     $(".buttons-html5 span").html('Export')
                     console.log(table)
@@ -588,6 +604,11 @@
                         table.fnDraw();
                     });
                 }else{
+
+                     while(final_cods.length) {
+                        final_cods.pop();
+                     }
+                     console.log("------",final_cods)
                      //alert("Panel Not available in the Polygon Area")
                      $('#onload').modal('show');
                      $('#alertMsg1').html("Panel Not available in the Polygon Area")
@@ -652,6 +673,7 @@
                         buttons: [
                             'excelHtml5'
                         ],
+                        order: [7, 'desc']
                     });
                     $(".buttons-html5 span").html('Export')
                 }else{
@@ -663,8 +685,16 @@
         })
 
     })
-    $('.mapbox-gl-draw_polygon').click(function(){
-        console.log("test")
+
+    $('.media_marker').click(function(){
+        var media_type = $(this).attr('data-media_type')
+<!--        alert(media_type)-->
+<!--        if(media_type == "Bulletin"){-->
+<!--            alert("true")-->
+<!--            $(".Custom").hide()-->
+<!--        }else{-->
+<!--            alert("false")-->
+<!--        }-->
     })
 
   </script>

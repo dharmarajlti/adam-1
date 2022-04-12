@@ -2,8 +2,6 @@
 {% load static %}
 {% block content %}
 <link rel="stylesheet" href="{% static "calc/css/style.css" %}">
-<!--<link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">-->
-<!--<link href="https://cdn.datatables.net/datetime/1.1.2/css/dataTables.dateTime.min.css" rel="stylesheet">-->
   <style>
     .calculation-box {
       height: 93px;
@@ -166,6 +164,10 @@
     }
     #reservation_data{
         width: none !important;
+    }
+    .buttons-html5{
+         background: #54b4f0 !important;
+         color: #fff !important;
     }
   </style>
 <section class="main-container p-0 m-0">
@@ -351,7 +353,7 @@
             var min = minDate.val();
             var max = maxDate.val();
             var date = new Date( data[4] );
-
+            console.log("00", date)
             if (
                 ( min === null && max === null ) ||
                 ( min === null && date <= max ) ||
@@ -364,6 +366,8 @@
         }
     );
     $(document).ready(function() {
+        $(".buttons-html5 span").html('Export')
+
         // Create date inputs
         minDate = new DateTime($('#min'), {
             format: 'YYYY-MM-DD'
@@ -372,13 +376,6 @@
             format: 'YYYY-MM-DD'
         });
 
-        // DataTables initialisation
-<!--        var table = $('#polygon_data').DataTable();-->
-
-<!--        // Refilter the table-->
-<!--        $('#min, #max').on('change', function () {-->
-<!--            table.draw();-->
-<!--        });-->
     });
     mapboxgl.accessToken = 'pk.eyJ1IjoicHJhdmVlbmxrdW1hciIsImEiOiJjbDBncnp6MGcwMHBkM29vMjE2YjB5ZXJ2In0.luURpRwktZMoOvxihp_J_A';
     const map = new mapboxgl.Map({
@@ -566,7 +563,7 @@
                     })
                     //$("#yourLabelId tbody").append(html)
                     //$("#rateAnalysis tbody").append(html1)
-                    var table = $('#polygon_data').dataTable( {
+                    let table = $('#polygon_data').dataTable( {
                         data : data_response,
                         //data : response,
                         columns: [
@@ -579,11 +576,17 @@
                                   {"data" : "Week Impressions"},
                                   {"data" : "Installed On"}
                                   ],
-                        searching : true
+                        searching : true,
+                        dom: 'Bfrtip',
+                        buttons: [
+                            'excelHtml5'
+                        ],
                     });
-<!--                    $('#min, #max').on('change', function () {-->
-<!--                        table.draw();-->
-<!--                    });-->
+                    $(".buttons-html5 span").html('Export')
+                    console.log(table)
+                    $('#min, #max').on('change', function () {
+                        table.fnDraw();
+                    });
                 }else{
                      //alert("Panel Not available in the Polygon Area")
                      $('#onload').modal('show');
@@ -629,6 +632,7 @@
                               }
                               data_response.push(data_table)
                     })
+                    $("#error_reservation").hide()
                     $("#reservation_data").show()
                     var table = $('#reservation_data').dataTable( {
                         data : data_response,
@@ -643,18 +647,26 @@
                                   {"data" : "To"},
                                   {"data" : "Value"},
                                   ],
-                        searching : true
+                        searching : true,
+                        dom: 'Bfrtip',
+                        buttons: [
+                            'excelHtml5'
+                        ],
                     });
+                    $(".buttons-html5 span").html('Export')
                 }else{
+                    $("#reservation_data").hide()
+                    $("#error_reservation").show()
                     $("#error_reservation").html("Reservation Data Not available")
                 }
             }
         })
 
     })
-    $(document).on("click", ".mapbox-gl-draw_trash", function (e) {
-        alert("test")
+    $('.mapbox-gl-draw_polygon').click(function(){
+        console.log("test")
     })
+
   </script>
 
 {% endblock %}

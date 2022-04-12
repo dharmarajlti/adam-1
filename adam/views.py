@@ -137,6 +137,7 @@ def view_panel_details(request):
         return HttpResponse(json.dumps({'status': "success", "data": list(address_data), "count": count}),
                             content_type="application/json")
 
+
 def find_address(request):
     return render(request, 'adam/find_address.html')
 
@@ -155,12 +156,6 @@ def create_address(request):
         obj.latitude = request.POST.get('latitude')
         obj.longitude = request.POST.get('longitude')
         obj.save()
-        # serilalizer = AddressSerializers(data=request.POST)
-        # if serilalizer.is_valid():
-        #      serilalizer.save()
-        #      print("saved")
-        # else:
-        #      print("not valid")
         return HttpResponse(json.dumps({'status': "success"}), content_type="application/json")
     else:
         return HttpResponse(json.dumps({'status': "bad request"}), content_type="application/json")
@@ -169,34 +164,13 @@ def create_address(request):
 @csrf_exempt
 def check_area(request):
     if request.method == 'POST' and request.is_ajax():
-        # res = Polygon([[(-81.27058013661991, 35.294380959284894), (-81.19077879693572, 35.32694110417019), (-81.13713456303682, 35.30306494604871), (-81.2262460590176, 35.28026749345226)]])
-        # print("*************", res)
-        # cods = request.POST.get('cods')
-        # min_lng = request.POST.get('min_lng')
-        # max_lng = request.POST.get('max_lng')
-        # min_lat = request.POST.get('min_lat')
-        # max_lat = request.POST.get('max_lat')
-        # print(min_lng, max_lng)
-        # result = PanelMaster.objects.filter(longitude__range=(min_lng, max_lng)
-        #                                 # latitude__range=(min_lat, max_lat)
-        #                                 ).values('longitude', 'latitude', 'city', 'state', 'country')
-        # # print(list(result))
-        # data = [{'longitude': '-79.955272', 'latitude': '32.837121', 'panel': '10710', 'market': 'charleston',
-        #          'mediatype': 'Bulletin'},
-        #         {'longitude': '-79.978316', 'latitude': '32.851848', 'panel': '11520', 'market': 'charleston',
-        #          'mediatype': 'Poster'},
-        #         {'longitude': '-79.986786', 'latitude': '32.847946', 'panel': 'P3716', 'market': 'charleston',
-        #          'mediatype': 'Poster'},
-        #         {'longitude': '-79.967356', 'latitude': '32.841073', 'panel': '1245', 'market': 'charleston',
-        #          'mediatype': 'Bulletin'},
-        #         {'longitude': '-79.944102', 'latitude': '32.797972', 'panel': '1012', 'market': 'charleston',
-        #         'mediatype': 'Bulletin'}]
+
         cods = request.POST.get('cods')
         cods = json.loads(cods)
         # geo_polygon = Polygon(( (0.0, 0.0), (0.0, 50.0), (50.0, 50.0), (50.0, 0.0), (0.0, 0.0) ))
 
         points = tuple((c[0], c[1]) for c in cods) + ((cods[0][0], cods[0][1]),)
-        print(points)
+        # print(points)
         # geo_polygon = Polygon((
         #     (cods[0][0], cods[0][1]),
         #     (cods[1][0], cods[1][1]),
@@ -233,9 +207,6 @@ def check_area(request):
             lng.append(q[0])
             lat.append(q[1])
             panel_id.append(q[3])
-        # print(panel_id)
-        # lng = lng[1:5]
-        # lat = lat[1:5]
         # str1 = ','.join(str(e) for e in lng)
         # str2 = ','.join(str(e) for e in lat)
         pid = ','.join(str(e) for e in panel_id)

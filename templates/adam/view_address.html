@@ -61,12 +61,16 @@
      {
       background: #54b4f0;
      }
+     .buttons-html5{
+         background: #54b4f0 !important;
+         color: #fff !important;
+     }
 </style>
 <section class="main-container">
     <div class="container-md my-4">
         <div class="rateAnalysisContainer bg-white adam_style">
             <h5>View Panel</h5>
-            <div style="float:left">City:</div>
+            <div style="float:left;margin: 7px;">City:</div>
             <select class="form-select region_city"  style="width:230px;" id="city_name" name="city_name" aria-label="Default select example">
               {% for region in region_city %}
 
@@ -89,38 +93,7 @@
                             <th scope="col">Unit Type</th>
                         </tr>
                     </thead>
-<!--                    <tbody>-->
-<!--                       {% for add in address_data %}-->
-<!--                        <tr>-->
-<!--                            <td >{{add.panel_no}}</td>-->
-<!--                            <td>-->
-<!--                                <a href="#" class="map-btn player_button" data-player_no="{{add.player_no}}"-->
-<!--                                   data-bs-toggle="modal" data-bs-target="#myModal_1"-->
-<!--                                   style="background: transparent;text-decoration: underline;">-->
-<!--                                    {{add.player_no}}-->
-<!--                                </a>-->
-<!--                            </td>-->
-<!--                            <td>{{add.market_name}}</td>-->
-<!--                            <td>-->
-<!--                                <a href="#" class="map-btn button" data-bs-toggle="modal" data-bs-target="#myModal"-->
-<!--                                   style="background: transparent;text-decoration: underline;"-->
-<!--                                   data-latLng="{{add.longitude}},{{add.latitude}}" data-panel="{{add.panel_no}}"-->
-<!--                                data-player_no="{{add.player_no}}" data-market_name="{{add.market_name}}">-->
-<!--                                    {{add.longitude}},{{add.latitude}}-->
-<!--                                </a>-->
-<!--                            </td>-->
-<!--                            <td>{{add.description}}</td>-->
-<!--                            <td>{{add.city}}</td>-->
-<!--                            <td>{{add.media_type}}</td>-->
-<!--                            <td>{{add.sub_market}}</td>-->
-<!--                            <td>{{add.unit_type}}</td>-->
-
-
-<!--                        </tr>-->
-<!--                    {% endfor %}-->
-<!--                    </tbody>-->
                     <tfoot>
-<!--                    <td colspan="8"><span class="fw-bold">{{ address_data|length }} Total</span></td>-->
                     </tfoot>
                 </table>
             </div>
@@ -197,18 +170,10 @@
     </div>
   </div>
 </div>
-                <div class="col-md-12">
-
-            </div>
-
+<div class="col-md-12"></div>
 </section>
 <script src="{% static "calc/js/main.js" %}"></script>
-
-<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"-->
-<!--        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="-->
-<!--        crossorigin="anonymous" referrerpolicy="no-referrer"></script>-->
-
-    <script>
+<script>
 
         $(document).on("click", ".button", function (e) {
             e.preventDefault();
@@ -239,15 +204,15 @@
                     closeOnClick: false,
                     closeOnMove: true,
                     maxWidth: "auto"
-                }).setHTML('<h5 class="mb-0">'+long+' '+lat+'</h5><h5 class="mb-0">'+panel+'</h5><h5 class="mb-0">'+player+'</h5><h5 class="mb-0">'+market+'</h5>'))
+                }).setHTML('<table class="pop-attr table table-bordered"><tr><td><b>Lat & Lng</b></td><td>'+long+' '+lat+'</td></tr><tr><td><b>Panel</b></td><td>'+panel+'</td></tr><tr><td><b>Player</b></td><td>'+player+'</td></tr><tr><td><b>Market</b></td><td>'+market+'</td></tr></table>'))
                 .addTo(map);
             marker1.togglePopup();
         });
 
     $(document).on("click", ".player_button", function (e) {
         e.preventDefault();
-        var table = $('#reservation_data').DataTable();
-        table.destroy()
+<!--        var table = $('#reservation_data').DataTable();-->
+<!--        table.destroy()-->
         var player = $(this).attr("data-player_no");
         show_reservation_data(player)
 
@@ -281,6 +246,7 @@
                                   }
                                   data_response.push(data_table)
                         })
+                        $("#error_reservation").hide()
                         $("#reservation_data").show()
                         var table = $('#reservation_data').dataTable( {
                             data : data_response,
@@ -295,9 +261,16 @@
                                       {"data" : "To"},
                                       {"data" : "Value"},
                                       ],
-                            searching : true
+                            searching : true,
+                            dom: 'Bfrtip',
+                            buttons: [
+                                'excelHtml5'
+                            ],
                         });
+                        $(".buttons-html5 span").html('Export')
                     }else{
+                        $("#reservation_data").hide()
+                        $("#error_reservation").show()
                         $("#error_reservation").html("Reservation Data Not available")
                     }
                 }
@@ -314,6 +287,7 @@
     $(document).ready(function(){
         city = $("#city_name").val()
         display_data(city)
+        $(".buttons-html5 span").html('Export')
     })
 
     function display_data(region, table_name){
@@ -361,13 +335,20 @@
                                   {"data" : "Week Impressions"},
                                   {"data" : "Unit Type"}
                                   ],
-                        searching : true
+                        dom: 'Bfrtip',
+                        buttons: [
+                            'excelHtml5'
+                        ],
+                        searching : true,
+                        "order":[]
+
                     });
+                    $(".buttons-html5 span").html('Export')
             }
 
         })
 
     }
-    </script>
-<!--<script src="{% static "calc/js/main.js" %}"></script>-->
+
+</script>
 {% endblock %}

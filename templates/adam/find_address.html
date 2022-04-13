@@ -369,21 +369,12 @@
         $(".mapbox-gl-draw_trash").addClass('map_delete')
         $(".mapbox-gl-draw_polygon").addClass('draw_ploy')
 
-        $('.draw_ploy').click(function(){
-            console.log("test")
-            alert("test")
-        })
-        $('.map_delete').click(function(){
-            console.log("test2")
-            alert("test2")
-        })
-
         // Create date inputs
         minDate = new DateTime($('#min'), {
-            format: 'YYYY-MM-DD'
+            format: 'MMMM Do YYYY'
         });
         maxDate = new DateTime($('#max'), {
-            format: 'YYYY-MM-DD'
+            format: 'MMMM Do YYYY'
         });
 
     });
@@ -414,6 +405,8 @@
     check_lng = []
     check_lat = []
     final_cods = []
+    let ploy_count = 0
+    console.log("----",ploy_count)
     map.on('click', function (e) {
       var eventLngLat = [e.lngLat.lng, e.lngLat.lat];
       check_lng.push(e.lngLat.lng)
@@ -440,6 +433,13 @@
     map.on('draw.update', updateArea);
     map.addControl(new mapboxgl.NavigationControl());
     function updateArea(e) {
+      ploy_count = ploy_count + 1
+<!--      console.log("",ploy_count)-->
+<!--      if(ploy_count > 1){-->
+<!--        alert(ploy_count)-->
+<!--        var table_1 = $('#polygon_data').dataTable();-->
+<!--        table_1.fnClearTable()-->
+<!--      }-->
       const data = draw.getAll();
       polygon_len = final_cods.length
       if(polygon_len < 3){
@@ -493,6 +493,7 @@
     }
     function check_area_details(max_lng,min_lng,max_lat,min_lat){
         //alert("2")
+
         cods = uniqueArray2(final_cods)
         new_cods = []
         $.each(cods, function(i,val){
@@ -568,14 +569,16 @@
                       add_class = ''
                       add_class = mediatype
 
-
+                      let el = $(".mapboxgl-marker").find('div');
+                      el.className = add_class;
                       const marker1 = new mapboxgl.Marker({ "color": color })
                       .setLngLat([v['longitude'], v['latitude']])
                       .setPopup(new mapboxgl.Popup().setHTML('<table class="pop-attr table table-bordered"><tr><td><b>Lat & Lng</b></td><td>'+latlng+'</td></tr><tr><td><b>City</b></td><td>'+city+'</td></tr><tr><td><b>Panel</b></td><td>'+panel+'</td></tr><tr><td><b>Player no</b></td><td>'+player+'</td></tr><tr><td><b>Market</b></td><td>'+market+'</td></tr><tr><td><b>Media Type</b></td><td>'+mediatype+'</td></tr><tr><td><b>Impressions</b></td><td>'+impressions+'</td></tr></table>'))
                       .addTo(map);
                       //marker1.togglePopup();
-                      $('.mapboxgl-canvas-container .mapboxgl-marker').addClass(add_class);
-                      $('.mapboxgl-marker').attr('media_value', add_class)
+<!--                      console.log(marker1)-->
+<!--                      $('.mapboxgl-canvas-container .mapboxgl-marker').addClass(add_class);-->
+<!--                      $('.mapboxgl-marker').attr('media_value', add_class)-->
                       //address = 'v['city'] +","+ v['state'] +","+ v['country']'
                       address = 'N. Charleston'
                       //html += '<tr><td>'+latlng+'</td><td>'+address+'</td></tr>'
@@ -614,7 +617,7 @@
                      while(final_cods.length) {
                         final_cods.pop();
                      }
-                     console.log("------",final_cods)
+                     //console.log("------",final_cods)
                      //alert("Panel Not available in the Polygon Area")
                      $('#onload').modal('show');
                      $('#alertMsg1').html("Panel Not available in the Polygon Area")
@@ -701,6 +704,15 @@
 <!--        }else{-->
 <!--            alert("false")-->
 <!--        }-->
+    })
+
+    $(".draw_ploy").click(function(){
+            console.log("test")
+            alert("test")
+    })
+    $(".map_delete").click(function(){
+        console.log("test2")
+        alert("test2")
     })
 
   </script>

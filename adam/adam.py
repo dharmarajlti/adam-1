@@ -170,5 +170,11 @@ def excel_to_csv(excelfile,**kwargs):
                     obj = SpatialPoint(points=point, panelmaster=PanelMaster.objects.get(id=c[0]))
                     add_list.append(obj)
                 SpatialPoint.objects.bulk_create(add_list)
+            if sheet == 'Inv_Static':
+                q = '''update adam_panelstaticdetails set panel_no = replace(player_no, code||'-', '')'''
+                cursor.execute(q)
+            if sheet == 'Inv_Players':
+                q = '''update adam_panelplayerdetails set panel_no = replace(player_no, code||'-', '')'''
+                cursor.execute(q)
             ### Ends Here ###
     return True

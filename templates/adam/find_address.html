@@ -463,6 +463,7 @@
         min_lng=Math.min.apply(Math,check_lng)
         max_lat=Math.max.apply(Math,check_lat)
         min_lat=Math.max.apply(Math,check_lat)
+        //alert("1")
         check_area_details(max_lng,min_lng,max_lat,min_lat)
         var lngLatArray = data.features[0].geometry.coordinates[0]
         // Restrict the area to 2 decimal points.
@@ -491,6 +492,7 @@
         return a;
     }
     function check_area_details(max_lng,min_lng,max_lat,min_lat){
+        //alert("2")
         cods = uniqueArray2(final_cods)
         new_cods = []
         $.each(cods, function(i,val){
@@ -511,6 +513,7 @@
                 data = res['data']
                 count = res['count']
                 if(count > 0){
+                //alert("3")
                     //$("#yourLabelId").show()
                     $(".rateAnalysisContainer").show()
                     $(".dataTables_empty").remove()
@@ -541,6 +544,8 @@
                       }else{
                         installed = installed.split(' ')
                         installed = installed[0]
+                        var tempDate = new Date(installed);
+                        installed = [tempDate.getFullYear(), tempDate.getMonth() + 1, tempDate.getDate()].join('/');
                       }
 
                       link_data = '<a href="#" data-bs-toggle="modal" data-bs-target="#myModal" data-player_no='+player+' class="show_data" style="background: transparent;text-decoration: underline;">'+player+'</a>'
@@ -603,6 +608,7 @@
                     $('#min, #max').on('change', function () {
                         table.fnDraw();
                     });
+                    //alert("4")
                 }else{
 
                      while(final_cods.length) {

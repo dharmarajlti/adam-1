@@ -103,33 +103,47 @@ def view_panel_details(request):
         city = request.POST.get('city')
 
         address_data = []
+        # query = '''select panel.panel_no,panel_st.player_no,panel.latitude,panel.longitude,panel.market_name,
+        #                     panel_st.submarket,panel_st.media_type,panel_st.unit_type,
+        #                     panel.status,panel_st.description,panel_st.code,
+        #                     panel_st.city,panel_st.site,panel_st.wk4_imp,panel_st.media_type,
+        #                     translate(panel_st.player_no,panel_st.code||'-','') as panel_st_panel_code
+        #                     from adam_panelstaticdetails panel_st
+        #                     join adam_panelmaster panel
+        #                     --on panel.panel_no = translate(panel_st.player_no,panel_st.code||'-','')
+        #                     on panel.panel_no = panel_st.panel_no
+        #                     and panel_st.city='{}'
+        #                 '''.format(city)
         query = '''select panel.panel_no,panel_st.player_no,panel.latitude,panel.longitude,panel.market_name,
                             panel_st.submarket,panel_st.media_type,panel_st.unit_type,
                             panel.status,panel_st.description,panel_st.code,
                             panel_st.city,panel_st.site,panel_st.wk4_imp,panel_st.media_type,
-                            translate(panel_st.player_no,panel_st.code||'-','') as panel_st_panel_code
-                            from adam_panelstaticdetails panel_st
-                            join adam_panelmaster panel
-                            --on panel.panel_no = translate(panel_st.player_no,panel_st.code||'-','') 
+                            translate(panel_st.player_no,panel_st.code||'-','') as panel_st_panel_code,
+                            panel_ply.city,panel_ply.site,panel_ply.wk4_imp,panel_ply.player_no,
+                            panel_ply.description,panel_ply.submarket
+                            from adam_panelmaster panel
+                            left join adam_panelstaticdetails panel_st
                             on panel.panel_no = panel_st.panel_no
-                            and panel_st.city='{}'
-                        '''.format(city)
+                            left join adam_panelplayerdetails panel_ply
+                            on panel.panel_no = panel_ply.panel_no
+                            where (panel_st.city='{}' or panel_ply.city='{}')
+                            '''.format(city, city)
         cursor.execute(query)
         if (cursor.rowcount > 0):
             count = cursor.rowcount
             for row in cursor.fetchall():
                 record = {}
                 record['panel_no'] = row[0]
-                record['player_no'] = row[1]
+                record['player_no'] = row[1] if row[1] else row[19]
                 record['market_name'] = row[4]
                 record['longitude'] = row[3]
                 record['latitude'] = row[2]
-                record['description'] = row[9]
-                record['city'] = row[11]
-                record['media_type'] = row[6]
-                record['sub_market'] = row[5]
-                record['unit_type'] = row[7]
-                record['wk4_imp'] = row[13]
+                record['description'] = row[9] if row[9] else row[20]
+                record['city'] = row[11] if row[11] else row[16]
+                record['media_type'] = row[6] if row[6] else 'others'
+                record['sub_market'] = row[5] if row[5] else row[21]
+                record['unit_type'] = row[7] if row[7] else 'others'
+                record['wk4_imp'] = row[13] if row[13] else row[18]
 
                 address_data.append(record)
         else:
@@ -210,19 +224,36 @@ def check_area(request):
         # str1 = ','.join(str(e) for e in lng)
         # str2 = ','.join(str(e) for e in lat)
         pid = ','.join(str(e) for e in panel_id)
+        # query = '''select panel.panel_no,panel_st.player_no,panel.latitude,panel.longitude,panel.market_name,
+        #                     panel_st.submarket,panel_st.media_type,panel_st.unit_type,
+        #                     panel.status,panel_st.description,panel_st.code,
+        #                     panel_st.city,panel_st.site,panel_st.wk4_imp,panel_st.media_type,
+        #                     translate(panel_st.player_no,panel_st.code||'-','') as panel_st_panel_code,
+        #                     panel_st.installed_date_str
+        #                     from adam_panelstaticdetails panel_st
+        #                     join adam_panelmaster panel
+        #                     --on panel.panel_no = translate(panel_st.player_no,panel_st.code||'-','')
+        #                     on panel.panel_no = panel_st.panel_no
+        #                     and panel.id in (
+        #                     select unnest(string_to_array('{}', ',')):: numeric)
+        #                 '''.format(pid)
         query = '''select panel.panel_no,panel_st.player_no,panel.latitude,panel.longitude,panel.market_name,
-                            panel_st.submarket,panel_st.media_type,panel_st.unit_type,
-                            panel.status,panel_st.description,panel_st.code,
-                            panel_st.city,panel_st.site,panel_st.wk4_imp,panel_st.media_type,
-                            translate(panel_st.player_no,panel_st.code||'-','') as panel_st_panel_code,
-                            panel_st.installed_date_str
-                            from adam_panelstaticdetails panel_st
-                            join adam_panelmaster panel
-                            --on panel.panel_no = translate(panel_st.player_no,panel_st.code||'-','')
-                            on panel.panel_no = panel_st.panel_no
-                            and panel.id in (
-                            select unnest(string_to_array('{}', ',')):: numeric)
-                        '''.format(pid)
+                                    panel_st.submarket,panel_st.media_type,panel_st.unit_type,
+                                    panel.status,panel_st.description,panel_st.code,
+                                    panel_st.city,panel_st.site,panel_st.wk4_imp,panel_st.media_type,
+                                    translate(panel_st.player_no,panel_st.code||'-','') as panel_st_panel_code,
+                                    panel_st.installed_date_str,
+                                    panel_ply.city,panel_ply.site,panel_ply.wk4_imp,panel_ply.player_no,
+                                    panel_ply.description,panel_ply.submarket
+                                    from adam_panelmaster panel
+                                    left join adam_panelstaticdetails panel_st
+                                    on panel.panel_no = panel_st.panel_no
+                                    left join adam_panelplayerdetails panel_ply
+                                    on panel.panel_no = panel_ply.panel_no
+                                    --on panel.panel_no = translate(panel_st.player_no,panel_st.code||'-','')
+                                    where panel.id in (
+                                    select unnest(string_to_array('{}', ',')):: numeric)
+                                '''.format(pid)
         cursor.execute(query)
         address_data = []
         if (cursor.rowcount > 0):
@@ -230,14 +261,14 @@ def check_area(request):
             for row in cursor.fetchall():
                 record = {}
                 record['panel_no'] = row[0]
-                record['player_no'] = row[1]
+                record['player_no'] = row[1] if row[1] else row[20]
                 record['market_name'] = row[4]
                 record['longitude'] = row[3]
                 record['latitude'] = row[2]
-                record['description'] = row[9]
-                record['city'] = row[11]
-                record['media_type'] = row[6]
-                record['wk4_imp'] = row[13]
+                record['description'] = row[9] if row[9] else row[21]
+                record['city'] = row[11] if row[11] else row[17]
+                record['media_type'] = row[6] if row[6] else 'others'
+                record['wk4_imp'] = row[13] if row[13] else row[19]
                 record['installed_date'] = row[16]
 
                 address_data.append(record)

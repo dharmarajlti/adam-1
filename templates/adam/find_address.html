@@ -244,6 +244,10 @@
                 <td scope="row"><i class="fa fa-map-marker fa-2x align-middle mr-2" aria-hidden="true" style="color: #8c1921"></i></td>
                 <td>Poster</td>
               </tr>
+              <tr class="media_marker" data-media_type="Others">
+                <td scope="row"><i class="fa fa-map-marker fa-2x align-middle mr-2" aria-hidden="true" style="color: #198754"></i></td>
+                <td>Others</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -633,7 +637,8 @@
 
     $(document).on("click", ".show_data", function (e) {
         e.preventDefault();
-        $('#reservation_data').dataTable().fnDestroy();
+        var table = $('#reservation_data').DataTable();
+        table.destroy()
         var player = $(this).attr("data-player_no");
         data = {"player": player}
         $.ajax({

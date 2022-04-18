@@ -211,8 +211,9 @@
 
     $(document).on("click", ".player_button", function (e) {
         e.preventDefault();
-<!--        var table = $('#reservation_data').DataTable();-->
-<!--        table.destroy()-->
+        var table = $('#reservation_data').DataTable();
+        table.destroy()
+
         var player = $(this).attr("data-player_no");
         show_reservation_data(player)
 

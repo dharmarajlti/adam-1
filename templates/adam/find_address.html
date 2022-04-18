@@ -258,11 +258,11 @@
             <table border="0" cellspacing="5" cellpadding="5">
                 <tbody class="d-flex date_css">
                     <tr>
-                        <td>Minimum date:</td>
+                        <td>Installed On From:</td>
                         <td><input type="text" id="min" name="min" class="form-control"></td>
                     </tr>
                     <tr>
-                        <td>Maximum date:</td>
+                        <td>Installed On To:</td>
                         <td><input type="text" id="max" name="max" class="form-control"></td>
                     </tr>
                 </tbody>
@@ -352,7 +352,7 @@
         function( settings, data, dataIndex ) {
             var min = minDate.val();
             var max = maxDate.val();
-            var date = new Date( data[4] );
+            var date = new Date( data[7] );
             if (
                 ( min === null && max === null ) ||
                 ( min === null && date <= max ) ||

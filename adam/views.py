@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import AddressSerializers
-from .models import PanelMaster, SpatialPolygon, RegionMaster
+from .models import PanelMaster, SpatialPolygon, RegionMaster, MarketMaster
 from django.views.decorators.csrf import csrf_exempt
 from django.db import connection
 cursor = connection.cursor()
@@ -86,11 +86,13 @@ def view_address(request):
 
         # print(address_data)
         region_city = RegionMaster.objects.all()
+        market_value = MarketMaster.objects.all()
         # print(list(region_city))
         context = {
                     'user_id': request.user.id,
                     'address_data': address_data,
-                    'region_city': list(region_city)
+                    'region_city': list(region_city),
+                    'market_value': list(market_value)
                 }
 
         return render(request, 'adam/view_address.html', context)
@@ -101,6 +103,12 @@ def view_address(request):
 def view_panel_details(request):
     if request.method == 'POST' and request.is_ajax():
         city = request.POST.get('city')
+        market = request.POST.get('market')
+        market_val = market.lower()
+        if market_val != 'all':
+            market_qry = "and panel.market_name = '{}'".format(market_val)
+        else:
+            market_qry = ''
 
         address_data = []
         # query = '''select panel.panel_no,panel_st.player_no,panel.latitude,panel.longitude,panel.market_name,
@@ -128,6 +136,7 @@ def view_panel_details(request):
                             on panel.panel_no = panel_ply.panel_no
                             where (panel_st.city='{}' or panel_ply.city='{}')
                             '''.format(city, city)
+        query = query + "" + market_qry
         cursor.execute(query)
         if (cursor.rowcount > 0):
             count = cursor.rowcount

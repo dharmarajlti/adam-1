@@ -70,14 +70,39 @@
     <div class="container-md my-4">
         <div class="rateAnalysisContainer bg-white adam_style">
             <h5>View Panel</h5>
-            <div style="float:left;margin: 7px;">City:</div>
-            <select class="form-select region_city"  style="width:230px;" id="city_name" name="city_name" aria-label="Default select example">
-              {% for region in region_city %}
+<!--            <div style="float:left;margin: 7px;">City:</div>-->
+<!--            <select class="form-select region_city"  style="width:230px;" id="city_name" name="city_name" aria-label="Default select example">-->
+<!--              {% for region in region_city %}-->
 
-                <option selected={{selected}} value={{region.city}}>{{region.city}}</option>
-             {% endfor %}
-            </select>
+<!--                <option selected={{selected}} value={{region.city}}>{{region.city}}</option>-->
+<!--             {% endfor %}-->
+<!--            </select>-->
             <div class="table-responsive">
+                <table border="0" cellspacing="5" cellpadding="5">
+                    <tbody class="d-flex date_css">
+                    <tr>
+                        <td>City:</td>
+                        <td>
+                            <select class="form-select region_city"  style="width:230px;" id="city_name" name="city_name" aria-label="Default select example">
+                             {% for region in region_city %}
+                                <option selected={{selected}} value={{region.city}}>{{region.city}}</option>
+                             {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Market:</td>
+                        <td>
+                            <select class="form-select market_value"  style="width:230px;" id="market_name" name="market_name" aria-label="Default select example">
+                               <option selected="selected" value="All">All</option>
+                            {% for market in market_value %}
+                               <option value={{market.market}}>{{market.market}}</option>
+                             {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
                 <table class="table" id="panel_details_data">
                     <thead>
                         <tr>
@@ -280,20 +305,31 @@
     }
     $(document).on("change", ".region_city", function (e) {
         city = $(this).val()
+        market = $("#market_name").val()
         var table = $('#panel_details_data').DataTable();
         table.destroy()
-        display_data(city)
+        display_data(city, market)
+
+    })
+
+    $(document).on("change", ".market_value", function (e) {
+        city = $("#city_name").val()
+        market = $('#market_name option:selected').text();
+        var table = $('#panel_details_data').DataTable();
+        table.destroy()
+        display_data(city, market)
 
     })
 
     $(document).ready(function(){
         city = $("#city_name").val()
-        display_data(city)
+        market = $('#market_name option:selected').text();
+        display_data(city, market)
         $(".buttons-html5 span").html('Export')
     })
 
-    function display_data(region, table_name){
-        data = {"city": region}
+    function display_data(region, market){
+        data = {"city": region, "market": market}
         $.ajax({
             type:"POST",
             async: false,
